@@ -83,6 +83,12 @@ summary(observed)
 #Plot observed richness by some variable in sample_data you viewed above
 plot(observed, Genus, color="Transect")
 
+#Check relationship between sequencing depth and richness
+data.frame("observed_richness" = (observed %>% summary)$estimate,
+           "depth" = phyloseq::sample_sums(Genus), # Easter egg! Phyloseq's function to get depth
+           "type" = Genus %>% sample_data %>% get_variable("Transect")) %>%
+  ggplot(aes(x = depth, y = observed_richness, color = type)) +
+  geom_point()
 #Run breakaway model on Genus level object
 estimated_richness <- breakaway(Genus)
 plot(estimated_richness, Genus, color="Transect")
